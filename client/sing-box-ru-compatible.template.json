@@ -1,0 +1,105 @@
+{
+  "log": { "level": "warn" },
+  "dns": {
+    "servers": [
+      { "tag": "local", "address": "local" },
+      { "tag": "foreign-doh", "address": "https://1.1.1.1/dns-query", "detour": "foreign" }
+    ],
+    "rules": [
+      { "domain_suffix": ["ru", "su", "xn--p1ai"], "server": "local" },
+      { "domain": ["gosuslugi.ru", "esia.gosuslugi.ru", "nalog.gov.ru", "nalog.ru", "mos.ru"], "server": "local" }
+    ],
+    "final": "foreign-doh"
+  },
+  "inbounds": [
+    {
+      "type": "tun",
+      "tag": "tun-in",
+      "interface_name": "tun0",
+      "address": ["172.19.0.1/30"],
+      "auto_route": true,
+      "strict_route": true,
+      "sniff": true
+    }
+  ],
+  "outbounds": [
+    {
+      "type": "vless",
+      "tag": "foreign",
+      "server": "__FOREIGN_SERVER_HOST__",
+      "server_port": 443,
+      "uuid": "__FOREIGN_UUID__",
+      "flow": "xtls-rprx-vision",
+      "tls": {
+        "enabled": true,
+        "server_name": "__FOREIGN_REALITY_SNI__",
+        "utls": { "enabled": true, "fingerprint": "chrome" },
+        "reality": {
+          "enabled": true,
+          "public_key": "__FOREIGN_REALITY_PUBLIC_KEY__",
+          "short_id": "__FOREIGN_REALITY_SHORT_ID__"
+        }
+      }
+    },
+    {
+      "type": "vless",
+      "tag": "ru-vps",
+      "server": "__RU_SERVER_HOST__",
+      "server_port": 443,
+      "uuid": "__RU_UUID__",
+      "flow": "xtls-rprx-vision",
+      "tls": {
+        "enabled": true,
+        "server_name": "__RU_REALITY_SNI__",
+        "utls": { "enabled": true, "fingerprint": "chrome" },
+        "reality": {
+          "enabled": true,
+          "public_key": "__RU_REALITY_PUBLIC_KEY__",
+          "short_id": "__RU_REALITY_SHORT_ID__"
+        }
+      }
+    },
+    { "type": "direct", "tag": "direct" },
+    { "type": "block", "tag": "block" }
+  ],
+  "route": {
+    "auto_detect_interface": true,
+    "rules": [
+      { "ip_is_private": true, "outbound": "direct" },
+      { "protocol": "dns", "outbound": "foreign" },
+      {
+        "domain": [
+          "gosuslugi.ru",
+          "esia.gosuslugi.ru",
+          "nalog.gov.ru",
+          "nalog.ru",
+          "mos.ru",
+          "mosreg.ru",
+          "online.sberbank.ru"
+        ],
+        "outbound": "direct"
+      },
+      {
+        "domain_suffix": [
+          "ru",
+          "su",
+          "xn--p1ai"
+        ],
+        "outbound": "direct"
+      },
+      {
+        "domain_keyword": [
+          "sberbank",
+          "tbank",
+          "alfabank",
+          "vtb",
+          "gazprombank",
+          "pochtabank",
+          "gosuslugi"
+        ],
+        "outbound": "direct"
+      }
+    ],
+    "final": "foreign"
+  }
+}
