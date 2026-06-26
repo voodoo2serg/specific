@@ -1,0 +1,6 @@
+node.env
+node-*.env
+*.log
+*.tar.gz
+*.png
+/root/
