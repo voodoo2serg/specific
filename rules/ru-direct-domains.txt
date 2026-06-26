@@ -1,0 +1,27 @@
+# Домены, которые в профиле RU Compatible идут напрямую (direct), минуя зарубежный VPS.
+# Формат: один домен на строку. Пустые строки и строки с # игнорируются.
+# Можно добавлять домены банков, госуслуг, маркетплейсов и локальных сервисов.
+
+gosuslugi.ru
+esia.gosuslugi.ru
+nalog.gov.ru
+nalog.ru
+mos.ru
+mosreg.ru
+sberbank.ru
+online.sberbank.ru
+tbank.ru
+alfabank.ru
+vtb.ru
+gazprombank.ru
+pochtabank.ru
+raiffeisen.ru
+ozon.ru
+wildberries.ru
+market.yandex.ru
+yandex.ru
+dzen.ru
+vk.com
+ok.ru
+mail.ru
+rambler.ru
